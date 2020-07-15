@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#-------------------------------------------------------------------------#
+# ----------------------------------------------------------------------- #
 #   Copyright (C) 2019 by Christoph Thelen                                #
 #   doc_bacardi@users.sourceforge.net                                     #
 #                                                                         #
@@ -17,10 +17,12 @@
 #   along with this program; if not, write to the                         #
 #   Free Software Foundation, Inc.,                                       #
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
-#-------------------------------------------------------------------------#
+# ----------------------------------------------------------------------- #
+
+import os.path
 
 
-#----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 #
 # Set up the Muhkuh Build System.
 #
@@ -28,10 +30,8 @@
 SConscript('mbs/SConscript')
 Import('atEnv')
 
-import os.path
 
-
-#----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 #
 # Build the artifacts.
 #
@@ -42,7 +42,11 @@ strModule = 'regdef'
 # Split the group by dots.
 aGroup = strGroup.split('.')
 # Build the path for all artifacts.
-strModulePath = 'targets/jonchki/repository/%s/%s/%s' % ('/'.join(aGroup), strModule, PROJECT_VERSION)
+strModulePath = 'targets/jonchki/repository/%s/%s/%s' % (
+    '/'.join(aGroup),
+    strModule,
+    PROJECT_VERSION
+)
 
 # Set the name of the artifact.
 strArtifact = 'regdef'
@@ -50,15 +54,44 @@ strArtifact = 'regdef'
 tArcList = atEnv.DEFAULT.ArchiveList('zip')
 
 tArcList.AddFiles('',
-                    'installer/install.lua')
+                  'installer/install.lua')
 
 tArcList.AddFiles('lua/',
                   'local/netiol_regdef.lua',
                   'local/netx4000full_regdef.lua',
                   'local/netx90_regdef.lua')
 
-tArtifact = atEnv.DEFAULT.Archive(os.path.join(strModulePath, '%s-%s.zip' % (strArtifact, PROJECT_VERSION)), None, ARCHIVE_CONTENTS = tArcList)
-tArtifactHash = atEnv.DEFAULT.Hash('%s.hash' % tArtifact[0].get_path(), tArtifact[0].get_path(), HASH_ALGORITHM='md5,sha1,sha224,sha256,sha384,sha512', HASH_TEMPLATE='${ID_UC}:${HASH}\n')
-tConfiguration = atEnv.DEFAULT.Version(os.path.join(strModulePath, '%s-%s.xml' % (strArtifact, PROJECT_VERSION)), 'installer/%s.xml' % strModule)
-tConfigurationHash = atEnv.DEFAULT.Hash('%s.hash' % tConfiguration[0].get_path(), tConfiguration[0].get_path(), HASH_ALGORITHM='md5,sha1,sha224,sha256,sha384,sha512', HASH_TEMPLATE='${ID_UC}:${HASH}\n')
-tArtifactPom = atEnv.DEFAULT.ArtifactVersion(os.path.join(strModulePath, '%s-%s.pom' % (strArtifact, PROJECT_VERSION)), 'installer/pom.xml')
+tArtifact = atEnv.DEFAULT.Archive(
+    os.path.join(
+        strModulePath,
+        '%s-%s.zip' % (strArtifact, PROJECT_VERSION)
+    ),
+    None,
+    ARCHIVE_CONTENTS=tArcList
+)
+tArtifactHash = atEnv.DEFAULT.Hash(
+    '%s.hash' % tArtifact[0].get_path(),
+    tArtifact[0].get_path(),
+    HASH_ALGORITHM='md5,sha1,sha224,sha256,sha384,sha512',
+    HASH_TEMPLATE='${ID_UC}:${HASH}\n'
+)
+tConfiguration = atEnv.DEFAULT.Version(
+    os.path.join(
+        strModulePath,
+        '%s-%s.xml' % (strArtifact, PROJECT_VERSION)
+    ),
+    'installer/%s.xml' % strModule
+)
+tConfigurationHash = atEnv.DEFAULT.Hash(
+    '%s.hash' % tConfiguration[0].get_path(),
+    tConfiguration[0].get_path(),
+    HASH_ALGORITHM='md5,sha1,sha224,sha256,sha384,sha512',
+    HASH_TEMPLATE='${ID_UC}:${HASH}\n'
+)
+tArtifactPom = atEnv.DEFAULT.ArtifactVersion(
+    os.path.join(
+        strModulePath,
+        '%s-%s.pom' % (strArtifact, PROJECT_VERSION)
+    ),
+    'installer/pom.xml'
+)
