@@ -54,6 +54,7 @@ tArcList.AddFiles('',
 
 tArcList.AddFiles('lua/',
                   'local/netiol_regdef.lua',
+                  'local/netx4000full_regdef.lua',
                   'local/netx90_regdef.lua')
 
 tArtifact = atEnv.DEFAULT.Archive(os.path.join(strModulePath, '%s-%s.zip' % (strArtifact, PROJECT_VERSION)), None, ARCHIVE_CONTENTS = tArcList)
